@@ -16,8 +16,17 @@ def thai_text(thai):
 # Get the HTML from the URL
 row = []
 print('---------------------------------\n  Welcome to TU Course Scraper! \n\tCreated by: P3TCH\n\tv0.0.2 \n---------------------------------')
-outputname = input('Enter output file name: ')
 url = input('Enter Start URL: ')
+outputname = input('Enter output file name: ')
+query = input('y/n: Do you want to query? ')
+while query != 'y' and query != 'n' and query != 'Y' and query != 'N':
+	print('Invalid input!')
+	query = input('y/n: Do you want to query? ')
+
+if query == 'y' or query == 'Y':
+	query = input('Enter query: ')
+
+
 page = 1
 
 while(1):
@@ -134,6 +143,8 @@ while(1):
 
 try:
 	df = pd.DataFrame(row, columns=['Course Code', 'Course Name', 'Teacher Name', 'Course Room'])
+	if query != 'n' and query != 'N':
+		df = df[df['Course Code'].str.contains(query)]
 	df.to_csv(F'{outputname}.csv', index=False, encoding='utf-8-sig')
 	print(F'Saved to {outputname}.csv file.')
 	print('Done. :D   By.P3TCH')
