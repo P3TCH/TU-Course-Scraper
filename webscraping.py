@@ -87,15 +87,17 @@ while(1):
 			first_name = spli[1].split(';">')
 			first_name = first_name[len(first_name) - 1].split('</font>')
 			first_name = first_name[0]
-			all_teach_name += first_name
+			if first_name.find('นายAccount') == -1:
+				all_teach_name += first_name
 		elif len(spli) == 3: #for 2 name
 			first_name = spli[1].split(';">')
 			first_name = first_name[len(first_name) - 1]
-			all_teach_name += first_name + '\n'
+			all_teach_name += first_name
 
 			last_name = spli[len(spli)-1].split('</font>')
 			last_name = last_name[0]
-			all_teach_name += last_name
+			if last_name.find('นายAccount') == -1:
+				all_teach_name += '\n' + last_name
 		else: #for more than 2 name
 			first_name = spli[1].split(';">')
 			first_name = first_name[len(first_name) - 1]
@@ -110,10 +112,12 @@ while(1):
 			# 	print(i)
 			# print(last_name)
 
-			all_teach_name += first_name + '\n'
+			all_teach_name += first_name
 			for i in spli:
-				all_teach_name += i + '\n'
-			all_teach_name += last_name
+				all_teach_name += '\n' + i
+
+			if last_name.find('นายAccount') == -1:
+				all_teach_name += '\n' + last_name
 		teacher_name.append(all_teach_name)
 	#print(teacher_name)
 
