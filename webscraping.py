@@ -18,13 +18,21 @@ row = []
 print('---------------------------------\n  Welcome to TU Course Scraper! \n\tCreated by: P3TCH\n\tv0.0.2 \n---------------------------------')
 url = input('Enter Start URL: ')
 outputname = input('Enter output file name: ')
-query = input('y/n: Do you want to query? ')
+query = input('y/n: Do you want to query course? ')
 while query != 'y' and query != 'n' and query != 'Y' and query != 'N':
 	print('Invalid input!')
 	query = input('y/n: Do you want to query? ')
 
 if query == 'y' or query == 'Y':
-	query = input('Enter query: ')
+	query_a = input('Enter query: ')
+
+sectionq = input('y/n: Do you want to query section? ')
+while sectionq != 'y' and sectionq != 'n' and sectionq != 'Y' and sectionq != 'N':
+	print('Invalid input!')
+	sectionq = input('y/n: Do you want to query section? ')
+
+if sectionq == 'y' or sectionq == 'Y':
+	sectionq_a = input('Enter query: ')
 
 
 page = 1
@@ -124,8 +132,22 @@ while(1):
 
 	#print(course_room)
 
+	# course section
+	course_section = []
+
+	course_section_temp = d.find_all('tr', {'valign' : 'TOP'})
+
+	for i in course_section_temp:
+		cs = i.find_all('font', {'size' : '2'})
+		cs_done = cs[6].text
+		course_section.append(cs_done[:6])
+
+	#print(course_section)
+
+
+
 	for i in range(len(course_code)):
-		row.append([course_code[i], course_name[i], teacher_name[i], course_room[i]]) #add to row
+		row.append([course_code[i], course_section[i], course_name[i], teacher_name[i], course_room[i]]) #add to row
 
 	try:
 		next_url = d.find_all('td', {'colspan' : '3'})
@@ -142,9 +164,12 @@ while(1):
 		break
 
 try:
-	df = pd.DataFrame(row, columns=['Course Code', 'Course Name', 'Teacher Name', 'Course Room'])
+	df = pd.DataFrame(row, columns=['Course Code', 'Course section', 'Course Name', 'Teacher Name', 'Course Room'])
 	if query != 'n' and query != 'N':
-		df = df[df['Course Code'].str.contains(query)]
+		df = df[df['Course Code'].str.contains(query_a)]
+
+	if sectionq != 'n' and sectionq != 'N':
+		df = df[df['Course section'].str.contains(sectionq_a)]
 	df.to_csv(F'{outputname}.csv', index=False, encoding='utf-8-sig')
 	print(F'Saved to {outputname}.csv file.')
 	print('Done. :D   By.P3TCH')
